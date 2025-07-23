@@ -11,8 +11,29 @@ const isDev = !app.isPackaged;
 // ✅ Dynamically resolve correct preload path
 function getPreloadPath() {
   if (!app.isPackaged) {
-    // Dev mode → use source
-    return path.join(__dirname, 'preload', 'electron-preload.js');
+    // ✅ DEV MODE → Quasar generates preload in .quasar/dev-electron/preload/electron-preload.cjs
+    const devPreload = path.join(
+      process.cwd(),
+      '.quasar',
+      'dev-electron',
+      'preload',
+      'electron-preload.cjs'
+    );
+
+    if (fs.existsSync(devPreload)) {
+      console.log('[DEV] Using Quasar dev preload:', devPreload);
+      return devPreload;
+    }
+
+    // Fallback → directly from source if dev build not yet generated
+    const srcPreload = path.join(
+      process.cwd(),
+      'src-electron',
+      'preload',
+      'electron-preload.js'
+    );
+    console.warn('[DEV] Quasar dev preload not found, falling back to:', srcPreload);
+    return srcPreload;
   } else {
     // Preferred Quasar location inside unpacked
     const quasarPreload = path.join(

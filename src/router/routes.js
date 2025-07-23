@@ -1,18 +1,24 @@
+import MainLayout from '../layouts/MainLayout.vue';
+import Register from '../pages/Register.vue';
+import Login from '../pages/Login.vue';
+import Enroll from '../pages/Enroll.vue';
+import ErrorNotFound from '../pages/ErrorNotFound.vue';
+
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    component: MainLayout,
     children: [
-      { path: '', component: () => import('pages/IndexPage.vue') }
-    ]
+      { path: '', redirect: '/login' }, // Redirect root to /register
+      { path: 'register', component: Register },
+      { path: 'login', component: Login },
+      { path: 'enroll', component: Enroll },
+    ],
   },
-
-  // Always leave this as last one,
-  // but you can also remove it
   {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue')
-  }
-]
+    component: ErrorNotFound,
+  },
+];
 
-export default routes
+export default routes;

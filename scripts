@@ -1,0 +1,5 @@
+hdiutil detach "/Volumes/FI Club 0.0.1-arm64" -force
+rm -rf dist
+npm run build
+npm run build:electron
+npm run dist:mac
